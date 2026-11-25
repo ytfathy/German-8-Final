@@ -204,7 +204,7 @@ body{background:#16293a;font-family:var(--h-body)}
 #learnApp .opt.isright{border-color:var(--ok);background:var(--okbg)}
 #learnApp .opt.iswrong{border-color:var(--bad);background:var(--badbg)}
 #learnApp .opt:disabled{cursor:default}
-#learnApp .gapline{line-height:2.4}
+#learnApp .gapline{line-height:2.4;font-weight:600}
 #learnApp .gapline select{border:2px solid var(--accent);border-radius:8px;padding:3px 6px;background:#fff;font-weight:800;max-width:100%}
 #learnApp .gapline select.ok{border-color:var(--ok);background:var(--okbg)}
 #learnApp .gapline select.no{border-color:var(--bad);background:var(--badbg)}
@@ -1227,12 +1227,13 @@ const GRAMMAR = [
   groups: [
     {
       id: "5b", title: "Übung 5b: Ergänzen Sie das Gespräch", src: "Kapitel 1 · Übung 5b",
-      instr: "Wähle das passende Wort: Idee · Schade · mitbringen · Lust · Uhr.",
+      instr: "Lies das Gespräch und wähle für jede Lücke das passende Wort.",
+      reading: "Wörter: Idee · Schade · mitbringen · Lust · Uhr",
       items: [
-        { type:"gap", q:"– Ich gehe am Samstag mit Ben in den Park. Hast du auch ___?", gaps:[{opts:"G5", ans:["Lust"]}], expl:"Lust haben = Hast du Lust? (Do you feel like it?)" },
-        { type:"gap", q:"– ___, da kann ich leider nicht. Ich bekomme am Samstag Besuch.", gaps:[{opts:"G5", ans:["Schade"]}], expl:"Schade! = What a pity!" },
-        { type:"gap", q:"– Kein Problem. Am Sonntag fahre ich mit Ben zum See. Willst du da mitkommen? – Das ist eine gute ___. Um wie viel ___ geht es los?", gaps:[{opts:"G5", ans:["Idee"]},{opts:"G5", ans:["Uhr"]}], expl:"eine gute Idee · Um wie viel Uhr …? = At what time …?" },
-        { type:"gap", q:"– Wir wollen um 10 Uhr mit dem Fahrrad losfahren und dann noch ein Picknick machen. – Okay, gut. Kann ich etwas ___? – Ja, vielleicht einen Salat.", gaps:[{opts:"G5", ans:["mitbringen"]}], expl:"Modalverb (kann) + Infinitiv am Ende: Kann ich etwas mitbringen?" }
+        { type:"gap", q:"○ Ich gehe am Samstag mit Ben in den Park. Hast du auch ___?", gaps:[{opts:"G5", ans:["Lust"]}], expl:"Lust haben = Hast du Lust? (Do you feel like it?)" },
+        { type:"gap", q:"● ___, da kann ich leider nicht. Ich bekomme am Samstag Besuch.", gaps:[{opts:"G5", ans:["Schade"]}], expl:"Schade! = What a pity!" },
+        { type:"gap", q:"○ Kein Problem. Am Sonntag fahre ich mit Ben zum See. Willst du da mitkommen?\n● Das ist eine gute ___. Um wie viel ___ geht es los?", gaps:[{opts:"G5", ans:["Idee"]},{opts:"G5", ans:["Uhr"]}], expl:"eine gute Idee · Um wie viel Uhr …? = At what time …?" },
+        { type:"gap", q:"○ Wir wollen um 10 Uhr mit dem Fahrrad losfahren und dann noch ein Picknick machen.\n● Okay, gut. Kann ich etwas ___?\n○ Ja, vielleicht einen Salat.\n● Okay, dann bis Sonntag!", gaps:[{opts:"G5", ans:["mitbringen"]}], expl:"Modalverb (kann) + Infinitiv am Ende: Kann ich etwas mitbringen?" }
       ]
     }
   ]
@@ -1861,18 +1862,16 @@ function itemHTML(it, mode, num){
     body = `<div class="opts" role="group">` + opts.map(([v,l]) => `<button type="button" class="opt" data-v="${v}">${esc(l)}</button>`).join("") + `</div>`;
     if (mode === "practice") body += "";
   } else if (it.type === "gap"){
-    let k = 0;
-    const line = esc(it.q).replace(/___/g, () => {
-      const g = it.gaps[k], idx = k++;
-      return `<select data-gap="${idx}" aria-label="Lücke ${idx+1}"><option value="">– wählen –</option>${g.opts.map(o => `<option>${esc(o)}</option>`).join("")}</select>`;
-    });
-    body = `<div class="gapline">${line}</div>`;
-    if (mode === "practice") body += `<div class="actions"><button type="button" class="btn small" data-act="check">Prüfen</button></div>`;
+    if (mode === "practice") body = `<div class="actions"><button type="button" class="btn small" data-act="check">Prüfen</button></div>`;
   } else if (it.type === "open"){
     body = `<textarea class="ansin" rows="1" aria-label="Deine Antwort" placeholder="Deine Antwort auf Deutsch …"></textarea>`;
     if (mode === "practice") body += `<div class="actions"><button type="button" class="btn small" data-act="check">Prüfen</button><button type="button" class="btn small ghost" data-act="show">Lösung zeigen</button></div>`;
   }
-  const qline = it.type === "gap" ? "" : esc(it.q);
+  let k = 0; // gap text sits in the question row, next to the number (one line per dialogue turn)
+  const qline = it.type !== "gap" ? esc(it.q) : `<div class="gapline">${esc(it.q).replace(/___/g, () => {
+      const g = it.gaps[k], idx = k++;
+      return `<select data-gap="${idx}" aria-label="Lücke ${idx+1}"><option value="">– wählen –</option>${g.opts.map(o => `<option>${esc(o)}</option>`).join("")}</select>`;
+    }).replace(/\n/g, "<br>")}</div>`;
   return `<div class="item" data-id="${it.id}" data-mode="${mode}">
     <div class="no">${num}</div>
     <div class="q">${qline}</div>
