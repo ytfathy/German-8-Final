@@ -417,7 +417,8 @@ body{background:#16293a;font-family:var(--h-body)}
     <div class="hhead">
       <div class="hlogo" aria-hidden="true">🔎</div>
       <div><h1>Erich ist verschwunden</h1><div class="hsub">Deutsch lernen mit der Geschichte · Akt 1 &amp; Akt 2</div></div>
-      <a class="chipb" href="/auth/logout" style="margin-left:auto;text-decoration:none">🚪 Abmelden · Log out</a>
+      <button type="button" class="chipb" data-go="learn:gram1-quiz" style="margin-left:auto">📐 Grammatik</button>
+      <a class="chipb" href="/auth/logout" style="text-decoration:none">🚪 Abmelden · Log out</a>
     </div>
     <div class="doors">
       <button type="button" class="door" data-go="learn:akt1-wortschatz">
@@ -460,6 +461,9 @@ body{background:#16293a;font-family:var(--h-body)}
         <button type="button" class="chipb" data-go="learn:akt2-video">🎬 Video</button>
         <button type="button" class="chipb" data-go="learn:akt2-quiz">❓ Quiz</button>
         <button type="button" class="chipb" data-go="learn:akt2-test">🏁 Abschlusstest</button></div>
+      <div class="mrow"><b>📐 Grammatik</b>
+        <button type="button" class="chipb" data-go="learn:gram1-quiz">Lektion 1 · Sich verabreden</button>
+        <button type="button" class="chipb" data-go="learn:gram2-quiz">Lektion 2 · Wollt ihr kommen? (weil)</button></div>
     </div>
     <div class="foot">Nach dem Buch „Erich ist verschwunden“ von Regine Böttcher und Susanne Lang.</div>
   </div>
@@ -473,6 +477,7 @@ body{background:#16293a;font-family:var(--h-body)}
     <nav class="units" id="units" aria-label="Lerneinheiten"></nav>
     <button class="notesbtn homebtn" type="button" data-go="home">🏠 Home</button>
     <button class="notesbtn" type="button" data-go="book">📖 Bilderbuch</button>
+    <button class="notesbtn" type="button" data-go="learn:gram1-quiz">📐 Grammatik</button>
     <button class="notesbtn" id="notesbtn" type="button">⚑ Hinweise</button>
     <a class="notesbtn" href="/auth/logout" style="text-decoration:none">🚪 Abmelden</a>
   </div>
@@ -500,6 +505,7 @@ body{background:#16293a;font-family:var(--h-body)}
   <label class="tb">🐢 <select id="rate" aria-label="Lesetempo"><option value="0.75">langsam</option><option value="0.9" selected>normal</option><option value="1.05">schnell</option></select></label>
   <button class="tb" type="button" id="btnFull">⛶ Vollbild</button>
   <button class="tb" type="button" id="btnNotes">⚑ Hinweise</button>
+  <button class="tb" type="button" data-go="learn:gram1-quiz">📐 Grammatik</button>
   <a class="tb" href="/auth/logout" style="text-decoration:none">🚪 Abmelden</a>
 </div>
 
@@ -1204,8 +1210,86 @@ const OPTS = {
   WP:  ["Dialog","Foto","Hilfe","Kleidung","Leberflecke","Orte","Polizei","ruhig","Zeit"],
   WO:  ["vor der Tür","im Bücherregal","im Schrank","auf einem Stück Papier","auf dem Schreibtisch","in Erichs Zimmer"],
   WER: ["Frau Schneider","Erich","Kommissar Gandolf","Herr Schneider"],
-  SH:  ["ist","sind","hat","haben","bin","habe"]
+  SH:  ["ist","sind","hat","haben","bin","habe"],
+  G5:  ["Idee","Schade","mitbringen","Lust","Uhr"],
+  W6:  ["A · Ja, gerne! Ich bringe einen Salat mit!","B · Oh, das ist aber schade. Was ist denn los?","C · Ich kann heute leider nicht. Morgen Abend?"],
+  W7B: ["A · Dort gibt es viel Platz.","B · Sie sind nach Italien gefahren.","C · Er muss arbeiten.","D · Sein Auto ist kaputt.","E · Lisa liest gern.","F · Sie hat Geburtstag."]
 };
+
+/* GRAMMATIK — Kapitel 1 „Und was machst du?“ (Schoology, W1 CW). Same item format as the Akt units. */
+const GRAMMAR = [
+{
+  id: "gram1", num: 1, gram: true, tasks: [],
+  titleDe: "Lektion 1 – Sich verabreden",
+  titleEn: "Lesson 1 – Making plans",
+  pages: "Kapitel 1 · Übung 5b",
+  color: "#7c3aed",
+  groups: [
+    {
+      id: "5b", title: "Übung 5b: Ergänzen Sie das Gespräch", src: "Kapitel 1 · Übung 5b",
+      instr: "Wähle das passende Wort: Idee · Schade · mitbringen · Lust · Uhr.",
+      items: [
+        { type:"gap", q:"– Ich gehe am Samstag mit Ben in den Park. Hast du auch ___?", gaps:[{opts:"G5", ans:["Lust"]}], expl:"Lust haben = Hast du Lust? (Do you feel like it?)" },
+        { type:"gap", q:"– ___, da kann ich leider nicht. Ich bekomme am Samstag Besuch.", gaps:[{opts:"G5", ans:["Schade"]}], expl:"Schade! = What a pity!" },
+        { type:"gap", q:"– Kein Problem. Am Sonntag fahre ich mit Ben zum See. Willst du da mitkommen? – Das ist eine gute ___. Um wie viel ___ geht es los?", gaps:[{opts:"G5", ans:["Idee"]},{opts:"G5", ans:["Uhr"]}], expl:"eine gute Idee · Um wie viel Uhr …? = At what time …?" },
+        { type:"gap", q:"– Wir wollen um 10 Uhr mit dem Fahrrad losfahren und dann noch ein Picknick machen. – Okay, gut. Kann ich etwas ___? – Ja, vielleicht einen Salat.", gaps:[{opts:"G5", ans:["mitbringen"]}], expl:"Modalverb (kann) + Infinitiv am Ende: Kann ich etwas mitbringen?" }
+      ]
+    }
+  ]
+},
+{
+  id: "gram2", num: 2, gram: true, tasks: [],
+  titleDe: "Lektion 2 – Wollt ihr kommen?",
+  titleEn: "Lesson 2 – Do you want to come? (Nebensätze mit weil)",
+  pages: "Kapitel 1 · Übungen 6, 7a–c",
+  color: "#0f8b6c",
+  groups: [
+    {
+      id: "6", title: "Übung 6: Welche Nachrichten passen zusammen?", src: "Kapitel 1 · Übung 6",
+      instr: "Welche Antwort (A–C) passt zu der Nachricht?",
+      items: [
+        { type:"mc", q:"1. Heute Abend 18 Uhr im Stadtcafé?", opts:"W6", ans:2 },
+        { type:"mc", q:"2. Pizza essen am Samstag bei mir! Kommt ihr?", opts:"W6", ans:0 },
+        { type:"mc", q:"3. Ich kann am Freitag leider nicht.", opts:"W6", ans:1 }
+      ]
+    },
+    {
+      id: "7a", title: "Übung 7a: Hören Sie die Gespräche. Was ist richtig?", src: "Kapitel 1 · Übung 7a · Audio 1.4–6",
+      instr: "Höre die Gespräche (Audio 1.4–6, im Unterricht) und wähle die richtige Antwort.",
+      flag: "Der Hörtext ist nicht im Programm. Deine Antwort wird gespeichert, aber nicht automatisch bewertet – die Lehrkraft prüft sie.",
+      items: [
+        { type:"mc", noKey:true, q:"1. Der Mann kommt nicht, …", opts:["weil er ins Kino geht.","weil er einen Termin hat.","weil er Monika trifft."] },
+        { type:"mc", noKey:true, q:"2. Vera soll Tina helfen, …", opts:["weil Tina krank war.","weil Vera gut Mathe kann.","weil Arno keine Zeit hat."] },
+        { type:"mc", noKey:true, q:"3. Die Frau geht nicht mit, …", opts:["weil sie keine Zeit hat.","weil sie keine Lust hat.","weil sie keine Schuhe hat."] }
+      ]
+    },
+    {
+      id: "7b", title: "Übung 7b: Was passt zusammen?", src: "Kapitel 1 · Übung 7b",
+      instr: "Welcher Grund (A–F) passt zu dem Satz?",
+      items: [
+        { type:"mc", q:"1. Lisa lädt ihre Freunde ein.", opts:"W7B", ans:5 },
+        { type:"mc", q:"2. Sie feiern im Garten.", opts:"W7B", ans:0 },
+        { type:"mc", q:"3. Jan kommt mit dem Fahrrad.", opts:"W7B", ans:3 },
+        { type:"mc", q:"4. Mona hat ein Buch gekauft.", opts:"W7B", ans:4 },
+        { type:"mc", q:"5. Tarik kann nicht kommen.", opts:"W7B", ans:2 },
+        { type:"mc", q:"6. Lisas Eltern sind nicht da.", opts:"W7B", ans:1 }
+      ]
+    },
+    {
+      id: "7c", title: "Übung 7c: Sätze mit weil – das Verb steht am Ende", src: "Kapitel 1 · Übung 7c",
+      instr: "Verbinde die Sätze aus 7b mit weil. Welcher Nebensatz ist richtig? Tipp: Im weil-Satz steht das konjugierte Verb am Ende.",
+      items: [
+        { type:"mc", q:"1. Lisa lädt ihre Freunde ein, …", opts:["weil sie hat Geburtstag.","weil sie Geburtstag hat.","weil hat sie Geburtstag."], ans:1, expl:"… weil sie Geburtstag hat. Verb: hat" },
+        { type:"mc", q:"2. Sie feiern im Garten, …", opts:["weil es dort viel Platz gibt.","weil dort gibt es viel Platz.","weil es gibt dort viel Platz."], ans:0, expl:"… weil es dort viel Platz gibt. Verb: gibt" },
+        { type:"mc", q:"3. Jan kommt mit dem Fahrrad, …", opts:["weil sein Auto ist kaputt.","weil ist sein Auto kaputt.","weil sein Auto kaputt ist."], ans:2, expl:"… weil sein Auto kaputt ist. Verb: ist" },
+        { type:"mc", q:"4. Mona hat ein Buch gekauft, …", opts:["weil Lisa liest gern.","weil Lisa gern liest.","weil liest Lisa gern."], ans:1, expl:"… weil Lisa gern liest. Verb: liest" },
+        { type:"mc", q:"5. Tarik kann nicht kommen, …", opts:["weil er arbeiten muss.","weil er muss arbeiten.","weil muss er arbeiten."], ans:0, expl:"… weil er arbeiten muss. Modalverb (muss) ganz am Ende, Infinitiv davor." },
+        { type:"mc", q:"6. Lisas Eltern sind nicht da, …", opts:["weil sie sind nach Italien gefahren.","weil sie nach Italien sind gefahren.","weil sie nach Italien gefahren sind."], ans:2, expl:"… weil sie nach Italien gefahren sind. Perfekt: Hilfsverb (sind) ganz am Ende." }
+      ]
+    }
+  ]
+}
+];
 
 /* Hinweise / flags for the teacher */
 const NOTES = [
@@ -1218,7 +1302,9 @@ const NOTES = [
   "Schreib- und Kreativaufgaben (S. 10, 13, 35) haben keine festen Lösungen und werden nicht automatisch bewertet.",
   "„weinen“, „untersuchen“, „vermuten“ und „der Rennwagen“ stehen in den Präsentationen, aber nicht im Buchtext dieser Seiten – sie sind mit „aus der Präsentation“ markiert.",
   "Scanfehler im PDF: „Flose“ = Hose (S. 11), „Fiut“ = Hut (S. 11), Akt 2 Übung S. 33 Satz 2 ohne Verb („will“ ergänzt).",
-  "Bilder auf den Wortkarten: Die Seite darf keine Bilder aus dem Internet laden, deshalb sind die Illustrationen farbige Emoji-Bilder."
+  "Bilder auf den Wortkarten: Die Seite darf keine Bilder aus dem Internet laden, deshalb sind die Illustrationen farbige Emoji-Bilder.",
+  "Grammatik, Lektion 2, Übung 7a (Hören, Audio 1.4–6): Der Hörtext ist nicht im Programm und es gibt keinen Lösungsschlüssel. Die Antworten werden gespeichert, aber nicht automatisch bewertet und zählen nicht im Abschlusstest.",
+  "Grammatik: Übung 7c war eine Schreibaufgabe und ist hier Multiple Choice (richtige Wortstellung im weil-Satz). Übungen 6 und 7b (Zuordnen) sind als Auswahl-Fragen enthalten."
 ];
 
 </script>
@@ -1732,7 +1818,8 @@ const short = t => t.includes(":") ? t.split(":").slice(1).join(":").trim() : t;
 const TABS = [["video","🎬","Video"],["wortschatz","📚","Wortschatz"],["quiz","❓","Quiz"],["test","🏁","Abschlusstest"]];
 
 /* ---------- prepare items ---------- */
-UNITS.forEach(u => {
+const ALL = UNITS.concat(GRAMMAR);
+ALL.forEach(u => {
   u.items = [];
   u.groups.forEach(g => g.items.forEach((it, i) => {
     it.id = u.id + "-" + g.id + "-" + (i+1);
@@ -1741,8 +1828,9 @@ UNITS.forEach(u => {
     if (it.gaps) it.gaps.forEach(gp => { if (typeof gp.opts === "string") gp.opts = OPTS[gp.opts]; });
     u.items.push(it);
   }));
-  u.vcount = CATS.reduce((a,c) => a + u.vocab[c[0]].length, 0);
+  if (u.vocab) u.vcount = CATS.reduce((a,c) => a + u.vocab[c[0]].length, 0);
 });
+const graded = rs => rs.filter(r => !r.it.noKey); // 7a has no answer key: never counted in scores
 
 /* ---------- answer checking ---------- */
 function norm(s){
@@ -1804,6 +1892,7 @@ function evaluate(el, it){
   if (it.type === "tf" || it.type === "mc"){
     const s = el.querySelector(".opt.sel"); if (!s) return {answered:false, ok:false};
     const v = s.dataset.v;
+    if (it.noKey) return {answered:true, ok:false, given:v};
     return {answered:true, ok: it.type === "tf" ? v === it.ans : Number(v) === it.ans, given:v};
   }
   if (it.type === "gap"){
@@ -1817,6 +1906,11 @@ function evaluate(el, it){
 }
 function markItem(el, it, res){
   el.classList.remove("right","wrong");
+  if (it.noKey){
+    el.querySelectorAll(".opt").forEach(b => b.disabled = true);
+    el.querySelector(".fbwrap").innerHTML = `<div class="fb"><b>📝 Antwort gespeichert.</b><span class="model">Ohne Hörtext keine automatische Lösung – die Lehrkraft prüft.</span></div>`;
+    return;
+  }
   el.classList.add(res.ok ? "right" : "wrong");
   if (it.type === "tf" || it.type === "mc"){
     el.querySelectorAll(".opt").forEach(b => {
@@ -1841,10 +1935,11 @@ const practice = store.get("practice", {});   // id -> true/false
 const exams = {};                               // unitId -> {submitted, results}
 
 /* ---------- build page ---------- */
-function unitById(id){ return UNITS.find(u => u.id === id) || UNITS[0]; }
+function unitById(id){ return ALL.find(u => u.id === id) || UNITS[0]; }
 
 function renderUnits(){
-  $("#units").innerHTML = UNITS.map(u => `<button type="button" class="unitbtn" data-unit="${u.id}" aria-current="${S.unit===u.id}">Akt ${u.num}</button>`).join("");
+  const gram = unitById(S.unit).gram;
+  $("#units").innerHTML = (gram ? GRAMMAR : UNITS).map(u => `<button type="button" class="unitbtn" data-unit="${u.id}" aria-current="${S.unit===u.id}">${gram ? "Lektion" : "Akt"} ${u.num}</button>`).join("");
 }
 
 function render(){
@@ -1855,21 +1950,21 @@ function render(){
   const app = $("#app");
   app.innerHTML = `
     <section class="hero">
-      <span class="kicker">Lerneinheit ${u.num} · ${esc(u.pages)}</span>
+      <span class="kicker">${u.gram ? "📐 Grammatik · Lektion" : "Lerneinheit"} ${u.num} · ${esc(u.pages)}</span>
       <h2>${esc(u.titleDe)}</h2>
       <div class="en">${esc(u.titleEn)}</div>
     </section>
     <div class="tabs" role="tablist">
-      ${TABS.map(([k,ic,l]) => `<button type="button" class="tab" role="tab" id="tab-${k}" aria-selected="${S.tab===k}" data-tab="${k}"><span class="ic" aria-hidden="true">${ic}</span>${l}${badge(u,k)}</button>`).join("")}
+      ${TABS.filter(([k]) => !u.gram || k==="quiz" || k==="test").map(([k,ic,l]) => `<button type="button" class="tab" role="tab" id="tab-${k}" aria-selected="${S.tab===k}" data-tab="${k}"><span class="ic" aria-hidden="true">${ic}</span>${l}${badge(u,k)}</button>`).join("")}
     </div>
-    <section class="panel ${S.tab==="video"?"on":""}" id="p-video">${videoHTML(u)}</section>
-    <section class="panel vocabp ${S.tab==="wortschatz"?"on":""}" id="p-wortschatz">${vocabToolsHTML()}<div id="vocabsheets"></div></section>
+    ${u.gram ? "" : `<section class="panel ${S.tab==="video"?"on":""}" id="p-video">${videoHTML(u)}</section>
+    <section class="panel vocabp ${S.tab==="wortschatz"?"on":""}" id="p-wortschatz">${vocabToolsHTML()}<div id="vocabsheets"></div></section>`}
     <section class="panel ${S.tab==="quiz"?"on":""}" id="p-quiz">${quizHTML(u)}</section>
     <section class="panel ${S.tab==="test"?"on":""}" id="p-test">${examHTML(u)}</section>`;
-  renderVocab(u);
+  if (!u.gram) renderVocab(u);
   { const r = store.get("sayRate", null); if (r && $("#sayrate")) $("#sayrate").value = r; }
   restorePractice(u);
-  setupVideo(u);
+  if (!u.gram) setupVideo(u);
   updateProgress(u);
   if (exams[u.id] && exams[u.id].submitted) showExamResult(u);
 }
@@ -2145,19 +2240,19 @@ function submitExam(u){
   exams[u.id] = {submitted:true, results};
   $("#submitbtn").disabled = true;
   showExamResult(u);
-  const pct = Math.round(results.filter(r => r.ok).length / results.length * 100);
+  const pct = Math.round(graded(results).filter(r => r.ok).length / graded(results).length * 100);
   const best = store.get("best-"+u.id, null);
   if (best == null || pct > best) store.set("best-"+u.id, pct);
   $("#examresult").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
 }
 function showExamResult(u){
-  const R = exams[u.id].results;
+  const R = graded(exams[u.id].results);
   const right = R.filter(r => r.ok).length, total = R.length, pct = Math.round(right/total*100);
   const verdict = pct >= 90 ? ["Ausgezeichnet! 🏆","Excellent – du kennst die Geschichte sehr gut."] :
                   pct >= 75 ? ["Sehr gut! 🌟","Very good – nur noch ein paar kleine Fehler."] :
                   pct >= 50 ? ["Gut gemacht! 👍","Good – lies die falschen Antworten noch einmal."] :
                               ["Weiter üben! 💪","Keep practising – schau dir Video und Wortschatz noch einmal an."];
-  const byGroup = u.groups.map(g => { const rr = R.filter(r => r.it.group === g); return [short(g.title), rr.filter(r=>r.ok).length, rr.length]; });
+  const byGroup = u.groups.map(g => { const rr = R.filter(r => r.it.group === g); return [short(g.title), rr.filter(r=>r.ok).length, rr.length]; }).filter(b => b[2]);
   const weak = byGroup.filter(b => b[1]/b[2] < .6).map(b => b[0]);
   $("#examresult").innerHTML = `<div class="card result">
     <div class="ring" style="--p:${pct}"><div><div><b>${pct}%</b><small>${right} / ${total} richtig</small></div></div></div>
@@ -2175,7 +2270,7 @@ document.addEventListener("click", e => {
   const t = e.target.closest("button, a[data-jump], .vc");
   if (!t) return;
   const u = unitById(S.unit);
-  if (t.dataset.unit){ S.unit = t.dataset.unit; S.tab = "video"; store.set("unit", S.unit); go(); return; }
+  if (t.dataset.unit){ S.unit = t.dataset.unit; S.tab = unitById(S.unit).gram ? "quiz" : "video"; store.set("unit", S.unit); go(); return; }
   if (t.dataset.tab){ switchTab(t.dataset.tab); window.scrollTo({top:0}); return; }
   if (t.dataset.cat){ S.cat = t.dataset.cat; document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c===t)); renderVocab(u); return; }
   if (t.dataset.jump){ e.preventDefault(); document.getElementById(t.dataset.jump).scrollIntoView({block:"start"}); return; }
@@ -2223,7 +2318,7 @@ document.addEventListener("click", e => {
     const r = {answered:true, ok:true};
     markItem(itemEl, it, r);
     if (isExam){ const ex = exams[u.id]; const rr = ex.results.find(x => x.it === it); if (rr) rr.ok = true; showExamResult(u);
-      const pct = Math.round(ex.results.filter(x=>x.ok).length/ex.results.length*100); const best = store.get("best-"+u.id,null); if (best==null||pct>best) store.set("best-"+u.id,pct); }
+      const pct = Math.round(graded(ex.results).filter(x=>x.ok).length/graded(ex.results).length*100); const best = store.get("best-"+u.id,null); if (best==null||pct>best) store.set("best-"+u.id,pct); }
     else { savePractice(it, itemEl, r, true); updateProgress(u); }
   }
 });
@@ -2254,10 +2349,11 @@ function go(){ const h = S.unit + "-" + S.tab; if (location.hash.slice(1) !== h)
 function fromHash(){
   const h = location.hash.slice(1);
   if (h === "sheets"){ return printSheets(); }
-  const m = h.match(/^(akt\d)(?:-(video|wortschatz|quiz|test))?$/);
+  const m = h.match(/^(akt\d|gram\d)(?:-(video|wortschatz|quiz|test))?$/);
   S.unit = m ? m[1] : (store.get("unit", null) || UNITS[0].id);
   S.tab = m && m[2] ? m[2] : "video";
-  if (!UNITS.some(u => u.id === S.unit)) S.unit = UNITS[0].id;
+  if (!ALL.some(u => u.id === S.unit)) S.unit = UNITS[0].id;
+  if (unitById(S.unit).gram && S.tab !== "test") S.tab = "quiz";
   render();
 }
 
@@ -2657,7 +2753,7 @@ window.Book = { stop: stopAll, cover: showCover, openAt(n){ const i = Math.min(S
   function route(){
     const h = location.hash.slice(1);
     let m;
-    if ((m = h.match(/^(akt\d)(-(video|wortschatz|quiz|test))?$/))) App.learn(h);
+    if ((m = h.match(/^(akt\d|gram\d)(-(video|wortschatz|quiz|test))?$/))) App.learn(h);
     else if ((m = h.match(/^seite-(\d+)$/))) App.book(Number(m[1]));
     else if (h === "bilderbuch") App.book();
     else App.home();
