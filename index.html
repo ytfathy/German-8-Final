@@ -190,13 +190,13 @@ body{background:#16293a;font-family:var(--h-body)}
 #learnApp .instr{color:var(--muted);font-weight:600;margin:0 0 10px;max-width:75ch}
 #learnApp .reading{background:var(--warnbg);border-left:5px solid var(--tape);padding:10px 14px;border-radius:10px;margin-bottom:10px;max-width:75ch}
 #learnApp .item{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:34px 1fr;gap:4px 10px}
-#learnApp .item .no{width:30px;height:30px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:.85rem;font-variant-numeric:tabular-nums}
+#learnApp .item > .no{width:30px;height:30px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:.85rem;font-variant-numeric:tabular-nums}
 #learnApp .item .q{font-weight:700;font-size:1.04rem;align-self:center}
 #learnApp .item .body{grid-column:2}
 #learnApp .item.right{border-color:var(--ok);background:linear-gradient(0deg,var(--okbg),var(--okbg))}
 #learnApp .item.wrong{border-color:var(--bad);background:linear-gradient(0deg,var(--badbg),var(--badbg))}
-#learnApp .item.right .no{background:var(--ok);color:#fff}
-#learnApp .item.wrong .no{background:var(--bad);color:#fff}
+#learnApp .item.right > .no{background:var(--ok);color:#fff}
+#learnApp .item.wrong > .no{background:var(--bad);color:#fff}
 #learnApp .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 #learnApp .opt{border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 14px;font-weight:700;text-align:left}
 #learnApp .opt:hover:not(:disabled){border-color:var(--accent)}
@@ -208,6 +208,11 @@ body{background:#16293a;font-family:var(--h-body)}
 #learnApp .gapline select{border:2px solid var(--accent);border-radius:8px;padding:3px 6px;background:#fff;font-weight:800;max-width:100%}
 #learnApp .gapline select.ok{border-color:var(--ok);background:var(--okbg)}
 #learnApp .gapline select.no{border-color:var(--bad);background:var(--badbg)}
+#learnApp .gapline .dl{display:flex;gap:10px;align-items:flex-start;padding:4px 12px;margin:6px 0;border-radius:12px;background:#f1f5fb;line-height:2.3}
+#learnApp .gapline .dl.b{background:#f3effd}
+#learnApp .gapline .dl .who{flex:0 0 26px;height:26px;margin-top:7px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:800;line-height:1;color:#fff;background:#64748b}
+#learnApp .gapline .dl.b .who{background:var(--accent)}
+#learnApp .gapline .dl > span:last-child{flex:1;min-width:0}
 #learnApp .ansin{width:100%;border:2px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px;background:#fff;min-height:44px;resize:vertical}
 #learnApp .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 #learnApp .fb{margin-top:10px;border-radius:10px;padding:8px 12px;font-size:.95rem}
@@ -1871,7 +1876,9 @@ function itemHTML(it, mode, num){
   const qline = it.type !== "gap" ? esc(it.q) : `<div class="gapline">${esc(it.q).replace(/___/g, () => {
       const g = it.gaps[k], idx = k++;
       return `<select data-gap="${idx}" aria-label="Lücke ${idx+1}"><option value="">– wählen –</option>${g.opts.map(o => `<option>${esc(o)}</option>`).join("")}</select>`;
-    }).replace(/\n/g, "<br>")}</div>`;
+    }).split("\n").map(l => /^[○●] /.test(l) // dialogue turn: ○ = Person A, ● = Person B
+      ? `<div class="dl ${l[0]==="●" ? "b" : "a"}"><span class="who" aria-label="Person ${l[0]==="●" ? "B" : "A"}">${l[0]==="●" ? "B" : "A"}</span><span>${l.slice(2)}</span></div>`
+      : `<div>${l}</div>`).join("")}</div>`;
   return `<div class="item" data-id="${it.id}" data-mode="${mode}">
     <div class="no">${num}</div>
     <div class="q">${qline}</div>
